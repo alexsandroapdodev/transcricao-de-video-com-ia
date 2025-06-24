@@ -1,4 +1,4 @@
-Transcrição de video com ia automatizar o processo de detecção de novos arquivos de áudio/vídeo no google drive usando IA, geração de resumo automático, armazenamento dos resultados, exibição em tempo real e uma aplicação web foi desenhado pela Rocketseat.
+Transcrição de vídeos de youtube com ia automatizar o processo de detecção de novos arquivos de áudio/vídeo no google drive também usando IA, geração de resumo automático, armazenamento dos resultados, exibição em tempo real e uma aplicação web foi desenhado pela Rocketseat.
 
 
 Confira aqui: https://transcricao-de-video-com-ia.vercel.app
