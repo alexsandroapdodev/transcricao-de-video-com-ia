@@ -22,24 +22,34 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ videoUrl })
       });
 
-      if (!response.ok) throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      if (!response.ok) {
+        throw new Error(`Erro ${response.status}: ${response.statusText}`);
+      }
 
       const data = await response.json();
 
+      // Pegamos a transcrição do objeto de resposta (caso exista)
       const texto = data.transcription || JSON.stringify(data, null, 2);
 
-      // Exibir como lista de frases
-      const linhas = texto.split("\n").filter(l => l.trim() !== "");
+      // Se não houver texto, avisa que não retornou resultado
+      if (!texto.trim()) {
+        transcriptionList.innerHTML = "<li>Não foi possível obter a transcrição.</li>";
+        return;
+      }
 
-      transcriptionList.innerHTML = ""; // limpa anterior
+      // Exibir o texto dividido por linhas, pulando linhas vazias
+      const linhas = texto.split("\n").filter(linha => linha.trim() !== "");
+
+      transcriptionList.innerHTML = ""; // limpa conteúdo anterior
       linhas.forEach((linha, index) => {
         const li = document.createElement("li");
+        // Ex: 00:00, 01:00, 02:00 ...
         li.innerHTML = `<span class="time">${String(index).padStart(2, "0")}:00</span> ${linha}`;
         transcriptionList.appendChild(li);
       });
 
     } catch (error) {
-      transcriptionList.innerHTML = `<li>Erro: ${error.message}</li>`;
+      transcriptionList.innerHTML = `<li style="color:red;">Erro: ${error.message}</li>`;
     }
   });
 });
