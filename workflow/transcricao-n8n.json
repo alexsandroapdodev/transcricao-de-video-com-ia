@@ -6,7 +6,51 @@
       "name": "Start",
       "type": "n8n-nodes-base.start",
       "typeVersion": 1,
-      "position": [100, 300]
+      "position": [100, 100]
+    },
+    {
+      "parameters": {
+        "httpMethod": "OPTIONS",
+        "path": "youtube/transcribe",
+        "responseMode": "lastNode"
+      },
+      "id": "2",
+      "name": "Webhook (OPTIONS)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 100]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Resposta de preflight CORS\nreturn [{\n  json: {},\n  headers: {\n    'Access-Control-Allow-Origin': '*',\n    'Access-Control-Allow-Methods': 'POST, OPTIONS',\n    'Access-Control-Allow-Headers': 'Content-Type'\n  },\n  statusCode: 204\n}];"
+      },
+      "id": "3",
+      "name": "Responder CORS (OPTIONS)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [600, 100]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "youtube/transcribe",
+        "responseMode": "lastNode"
+      },
+      "id": "4",
+      "name": "Webhook (POST)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Simular retorno da transcrição via webhook\nconst input = items[0].json;\nreturn [{\n  json: {\n    message: \"Transcrição recebida com sucesso via POST\",\n    dados: input\n  },\n  headers: {\n    'Access-Control-Allow-Origin': '*',\n    'Access-Control-Allow-Methods': 'POST, OPTIONS',\n    'Access-Control-Allow-Headers': 'Content-Type'\n  }\n}];"
+      },
+      "id": "5",
+      "name": "Responder CORS (POST)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [600, 300]
     },
     {
       "parameters": {
@@ -15,11 +59,11 @@
         "folderId": "PASTA_ID_AUDIOS",
         "options": {}
       },
-      "id": "2",
+      "id": "6",
       "name": "Watch Google Drive",
       "type": "n8n-nodes-base.googleDriveTrigger",
       "typeVersion": 1,
-      "position": [300, 300],
+      "position": [100, 600],
       "credentials": {
         "googleDriveServiceAccount": "GOOGLE_CREDENTIALS"
       }
@@ -38,11 +82,11 @@
           }
         ]
       },
-      "id": "3",
+      "id": "7",
       "name": "Transcribe Audio (Whisper)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
-      "position": [500, 300]
+      "position": [300, 600]
     },
     {
       "parameters": {
@@ -50,11 +94,11 @@
         "prompt": "Resuma este áudio com: tema principal, tópicos, decisões, participantes (se houver).",
         "temperature": 0.7
       },
-      "id": "4",
+      "id": "8",
       "name": "Resumo (ChatGPT)",
       "type": "n8n-nodes-base.openai",
       "typeVersion": 1,
-      "position": [700, 300],
+      "position": [500, 600],
       "credentials": {
         "openAIApi": "OPENAI_CREDENTIALS"
       }
@@ -67,11 +111,11 @@
         "fileContent": "={{$json[\"choices\"][0][\"text\"]}}",
         "parents": []
       },
-      "id": "5",
+      "id": "9",
       "name": "Salvar Resumo no Drive",
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 1,
-      "position": [900, 300],
+      "position": [700, 600],
       "credentials": {
         "googleDriveServiceAccount": "GOOGLE_CREDENTIALS"
       }
@@ -82,53 +126,37 @@
         "method": "POST",
         "jsonParameters": true,
         "options": {},
-        "bodyParametersJson": "{\"status\": \"Finalizado com sucesso\", \"arquivo\": \"{{$node[\"Salvar Resumo no Drive\"].parameter[\"fileName\"]}}\"}"
+        "bodyParametersJson": "{\"status\": \"Finalizado com sucesso\", \"arquivo\": \"{{$node[\\\"Salvar Resumo no Drive\\\"].parameter[\\\"fileName\\\"]}}\"}"
       },
-      "id": "6",
+      "id": "10",
       "name": "Webhook Notificação",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
-      "position": [1100, 300]
+      "position": [900, 600]
     }
   ],
   "connections": {
+    "Webhook (OPTIONS)": {
+      "main": [[{ "node": "Responder CORS (OPTIONS)", "type": "main", "index": 0 }]]
+    },
+    "Webhook (POST)": {
+      "main": [[{ "node": "Responder CORS (POST)", "type": "main", "index": 0 }]]
+    },
     "Watch Google Drive": {
-      "main": [
-        [
-          {
-            "node": "Transcribe Audio (Whisper)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{ "node": "Transcribe Audio (Whisper)", "type": "main", "index": 0 }]]
     },
     "Transcribe Audio (Whisper)": {
-      "main": [
-        [
-          {
-            "node": "Resumo (ChatGPT)",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
+      "main": [[{ "node": "Resumo (ChatGPT)", "type": "main", "index": 0 }]]
     },
     "Resumo (ChatGPT)": {
       "main": [
-        [
-          {
-            "node": "Salvar Resumo no Drive",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Webhook Notificação",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{ "node": "Salvar Resumo no Drive", "type": "main", "index": 0 }],
+        [{ "node": "Webhook Notificação", "type": "main", "index": 0 }]
       ]
     }
-  }
+  },
+  "active": true,
+  "name": "Pipeline Transcrição + Webhook CORS",
+  "settings": {},
+  "tags": []
 }
