@@ -14,14 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
     transcriptionList.innerHTML = "<li>Transcrevendo... aguarde...</li>";
 
     try {
-      const response = await fetch("https://n8n-deploy-39k2.onrender.com/webhook-test/youtube/transcribe", {
+      const response = await fetch("http://localhost:3000/transcribe", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ videoUrl })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ videoUrl }),
       });
-
       if (!response.ok) throw new Error(`Erro ${response.status}: ${response.statusText}`);
 
       const data = await response.json();
