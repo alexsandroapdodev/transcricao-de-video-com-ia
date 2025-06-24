@@ -10,7 +10,7 @@ Automatizar o processo de:
 1. Detecção de novos arquivos de áudio/vídeo no Google Drive
 2. Transcrição do conteúdo usando IA
 3. Geração de resumo automático
-4. Armazenamento dos resultados no Supabase
+4. Armazenamento dos resultados
 5. Exibição em tempo real em uma aplicação web
 
 
