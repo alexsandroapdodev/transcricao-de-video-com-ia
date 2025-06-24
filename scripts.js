@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     transcriptionList.innerHTML = "<li>Transcrevendo... aguarde...</li>";
 
     try {
-      const response = await fetch("http://localhost:5678/webhook-/youtube/transcribe", {
+      const response = await fetch("http://localhost:5678/webhook/youtube/transcribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
