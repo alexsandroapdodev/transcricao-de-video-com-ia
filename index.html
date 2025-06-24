@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcrição de Video com IA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+     <main class="container">
+    <h1><span class="highlight">YouTube</span>Transcription</h1>
+
+    <div class="input-wrapper">
+      <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=..." />
+      <button id="transcribe-btn">Transcrever</button>
+    </div>
+
+    <section class="video-section">
+      <div class="video-wrapper">
+        <video id="video-player" controls poster="./assets/YouTube Player.png">
+          <source src="video.mp4" type="video/mp4" />
+          Seu navegador não suporta vídeos HTML5.
+        </video>
+        <div class="caption">A consciência é talvez o maior enigma da natureza</div>
+      </div>
+
+      <div class="transcription-box">
+        <ul id="transcription-list">
+          <li><span class="time">00:00</span> Consciousness <mark>is perhaps</mark> the biggest riddle in nature.</li>
+          <li><span class="time">00:04</span> Stripped to its core meaning,</li>
+          <li><span class="time">00:06</span> consciousness is what allows us to be aware both of our surroundings</li>
+          <li><span class="time">00:10</span> and of our own inner state.</li>
+          <li><span class="time">00:13</span> But thinking about consciousness has this habit of taking us round in circles.</li>
+          <li><span class="time">00:19</span> We all intuitively know what consciousness is.</li>
+          <li><span class="time">00:22</span> It's this.</li>
+          <li><span class="time">00:24</span> It's what you're experiencing here, right now.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0D0D0D;
+  color: #F1F1F1;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+h1 .highlight {
+  color: #B832F5;
+  margin-right: 0.3rem;
+}
+
+.input-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+#video-url {
+  width: 60%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background: #1E1E1E;
+  color: #F1F1F1;
+}
+
+#transcribe-btn {
+  background-color: #B832F5;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#transcribe-btn:hover {
+  background-color: #9d27d4;
+}
+
+.video-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.video-wrapper {
+  flex: 1 1 480px;
+  background: #111;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 0 20px rgba(184, 50, 245, 0.3);
+}
+
+#video-player {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.caption {
+  background: #000;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.transcription-box {
+  flex: 1 1 480px;
+  background: #1E1E1E;
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-height: 460px;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(184, 50, 245, 0.2);
+}
+
+.transcription-box ul {
+  list-style: none;
+  padding: 0;
+}
+
+.transcription-box li {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.transcription-box .time {
+  font-weight: bold;
+  color: #B832F5;
+  margin-right: 0.5rem;
+}
+
+.transcription-box mark {
+  background: #b832f566;
+  color: #fff;
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+@media (max-width: 768px) {
+  .video-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #video-url {
+    width: 100%;
+  }
+}

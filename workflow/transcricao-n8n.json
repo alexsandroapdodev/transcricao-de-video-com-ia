@@ -1,0 +1,134 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "watch",
+        "folderId": "PASTA_ID_AUDIOS",
+        "options": {}
+      },
+      "id": "2",
+      "name": "Watch Google Drive",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [300, 300],
+      "credentials": {
+        "googleDriveServiceAccount": "GOOGLE_CREDENTIALS"
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.openai.com/v1/audio/transcriptions",
+        "method": "POST",
+        "authentication": "headerAuth",
+        "sendBinaryData": true,
+        "options": {},
+        "headerParameters": [
+          {
+            "name": "Authorization",
+            "value": "Bearer SUA_CHAVE_OPENAI"
+          }
+        ]
+      },
+      "id": "3",
+      "name": "Transcribe Audio (Whisper)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "prompt": "Resuma este áudio com: tema principal, tópicos, decisões, participantes (se houver).",
+        "temperature": 0.7
+      },
+      "id": "4",
+      "name": "Resumo (ChatGPT)",
+      "type": "n8n-nodes-base.openai",
+      "typeVersion": 1,
+      "position": [700, 300],
+      "credentials": {
+        "openAIApi": "OPENAI_CREDENTIALS"
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "upload",
+        "fileName": "/Resumos/{{ $now.toISOString().split('T')[0] }}_resumo.md",
+        "fileContent": "={{$json[\"choices\"][0][\"text\"]}}",
+        "parents": []
+      },
+      "id": "5",
+      "name": "Salvar Resumo no Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "credentials": {
+        "googleDriveServiceAccount": "GOOGLE_CREDENTIALS"
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://seu-webhook.dev/notify",
+        "method": "POST",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\"status\": \"Finalizado com sucesso\", \"arquivo\": \"{{$node[\"Salvar Resumo no Drive\"].parameter[\"fileName\"]}}\"}"
+      },
+      "id": "6",
+      "name": "Webhook Notificação",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [1100, 300]
+    }
+  ],
+  "connections": {
+    "Watch Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Audio (Whisper)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Audio (Whisper)": {
+      "main": [
+        [
+          {
+            "node": "Resumo (ChatGPT)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resumo (ChatGPT)": {
+      "main": [
+        [
+          {
+            "node": "Salvar Resumo no Drive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Webhook Notificação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
