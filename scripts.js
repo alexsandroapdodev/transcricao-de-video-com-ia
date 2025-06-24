@@ -33,17 +33,19 @@ button.addEventListener('click', async () => {
     // Aqui você deve ajustar para ler o que o seu workflow retorna.
     // Supondo que a resposta tenha um campo `transcript` com array de objetos {time, text}:
 
-    if (!data.transcript) {
-      throw new Error('Resposta inválida do servidor.');
-    }
+const resumo = data?.choices?.[0]?.message?.content;
 
-    transcriptionList.innerHTML = '';
+if (!resumo) {
+  throw new Error('Resposta inválida do servidor.');
+}
 
-    data.transcript.forEach(segment => {
-      const li = document.createElement('li');
-      li.innerHTML = `<span class="time">${segment.time}</span> ${segment.text}`;
-      transcriptionList.appendChild(li);
-    });
+transcriptionList.innerHTML = '';
+
+const li = document.createElement('li');
+li.textContent = resumo;
+transcriptionList.appendChild(li);
+
+caption.innerText = 'Transcrição concluída com sucesso!';
 
     caption.innerText = 'Transcrição concluída com sucesso!';
     // Se quiser trocar o vídeo, pode fazer aqui:
