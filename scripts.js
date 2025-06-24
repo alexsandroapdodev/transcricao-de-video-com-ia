@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     transcriptionList.innerHTML = "<li>Transcrevendo... aguarde...</li>";
 
     try {
-      const response = await fetch("http://localhost:3000/transcribe", {
+      const response = await fetch("https://back-end-transcricao.onrender.com/transcribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ videoUrl }),
