@@ -11,14 +11,21 @@
     <h1><span class="highlight">YouTube</span>Transcription</h1>
 
     <div class="input-wrapper">
+      
+<label for="audio-file">Seu áudio mp3</label>
+<input type="file" id="audio-file" accept="audio/mp3,audio/mpeg" />
+
       <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=..." />
       <button id="transcribe-btn">Transcrever</button>
     </div>
 
+<!-- Campo para upload de áudio -->
+
+
     <section class="video-section">
       <div class="video-wrapper">
         <video id="video-player" controls poster="./assets/YouTube Player.png">
-          <source src="video.mp4" type="video/mp4" />
+          <source src="./20 MINUTOS DE GRATIDÃO INTENSA COM AFIRMAÇÕES POSITIVAS.mp4" type="video/mp4" />
           Seu navegador não suporta vídeos HTML5.
         </video>
         <div class="caption">A consciência é talvez o maior enigma da natureza</div>
